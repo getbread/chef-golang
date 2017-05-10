@@ -111,7 +111,9 @@ func (chef *Chef) GetTypedDataByName(data interface{}, name string) (bool, error
 		return false, err
 	}
 
-	json.Unmarshal(body, &data)
+	if err = json.Unmarshal(body, &data); err != nil {
+		return false, err
+	}
 
 	return true, nil
 }
