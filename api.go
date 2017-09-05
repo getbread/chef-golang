@@ -305,16 +305,16 @@ func (chef *Chef) makeRequest(request *http.Request) (*http.Response, error) {
 	var client *http.Client
 	if chef.SSLNoVerify {
 		tr := &http.Transport{
-                        Dial: (&net.Dialer{
-                        Timeout: 5 * time.Second,
-                        }).Dial,
-                        TLSHandshakeTimeout: 5 * time.Second,
+			Dial: (&net.Dialer{
+				Timeout: 5 * time.Second,
+			}).Dial,
+			TLSHandshakeTimeout: 5 * time.Second,
 			Proxy:           http.ProxyFromEnvironment,
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		}
 		client = &http.Client{
-                    Timeout: time.Second * 10,
-                    Transport: tr
+			Timeout: time.Second * 10,
+			Transport: tr,
                 }
 	} else {
 		client = &http.Client{}
