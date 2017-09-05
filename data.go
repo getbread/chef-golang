@@ -102,11 +102,12 @@ func (chef *Chef) GetDataByName(name string) (map[string]string, bool, error) {
 func (chef *Chef) GetTypedDataByName(data interface{}, name string) (bool, error) {
 	log.Printf("Before chef.Get")
         resp, err := chef.Get(fmt.Sprintf("data/%s", name))
-	defer resp.Body.Close()
         log.Printf("After chef.Get")
 	if err != nil {
 		return false, err
 	}
+	defer resp.Body.Close()
+
         log.Printf("Before resposneBody")
 	body, err := responseBody(resp)
         log.Printf("After resposneBody")
