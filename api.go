@@ -548,6 +548,7 @@ func responseBody(resp *http.Response) ([]byte, error) {
 		return nil, errors.New(resp.Status)
 	}
 
+	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 
 	if err != nil {
