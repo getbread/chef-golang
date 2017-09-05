@@ -100,7 +100,9 @@ func (chef *Chef) GetDataByName(name string) (map[string]string, bool, error) {
 //        fmt.Printf("%#v", cfg)
 //    }
 func (chef *Chef) GetTypedDataByName(data interface{}, name string) (bool, error) {
-	resp, err := chef.Get(fmt.Sprintf("data/%s", name))
+	log.Printf("Before chef.Get")
+        resp, err := chef.Get(fmt.Sprintf("data/%s", name))
+        log.Printf("After chef.Get")
 	if err != nil {
 		return false, err
 	}
