@@ -114,12 +114,12 @@ func (chef *Chef) GetTypedDataByName(data interface{}, name string) (bool, error
 		return false, err
 	}
 
-        log.Printf("Before resposneBody")
+        log.Printf("Before unmarshal")
 	if err = json.Unmarshal(body, &data); err != nil {
-                log.Printf("Error on resposneBody")
+                log.Printf("Error on unmarshal")
 		return false, err
 	}
-        log.Printf("After resposneBody")
+        log.Printf("After unmarshal")
 
 	return true, nil
 }
