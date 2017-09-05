@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+        "log"
 )
 
 // chef.GetData returns a map of databag names to their related REST URL
@@ -103,7 +104,9 @@ func (chef *Chef) GetTypedDataByName(data interface{}, name string) (bool, error
 	if err != nil {
 		return false, err
 	}
+        log.Printf("Before resposneBody")
 	body, err := responseBody(resp)
+        log.Printf("After resposneBody")
 	if err != nil {
 		if strings.Contains(err.Error(), "404") {
 			return false, nil
@@ -111,9 +114,12 @@ func (chef *Chef) GetTypedDataByName(data interface{}, name string) (bool, error
 		return false, err
 	}
 
+        log.Printf("Before resposneBody")
 	if err = json.Unmarshal(body, &data); err != nil {
+                log.Printf("Error on resposneBody")
 		return false, err
 	}
+        log.Printf("After resposneBody")
 
 	return true, nil
 }
