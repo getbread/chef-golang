@@ -312,6 +312,7 @@ func (chef *Chef) makeRequest(request *http.Request) (*http.Response, error) {
 			TLSHandshakeTimeout: 5 * time.Second,
 			Proxy:           http.ProxyFromEnvironment,
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+			DisableKeepAlives: true,
 		}
 		client = &http.Client{
 			Timeout: time.Second * 10,
