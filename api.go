@@ -377,11 +377,11 @@ func readFileFromRequest(r *http.Request, boundary string) (string, error) {
 	// multipart as this is how the Chef API is designed
 	fp := form.File["tarball"][0]
 	file, err := fp.Open()
+	defer file.Close()
 	if err != nil {
 		return "", err
 	}
 	buf, err := ioutil.ReadAll(file)
-	file.Close()
 	if err != nil {
 		return "", err
 	}
