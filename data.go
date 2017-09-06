@@ -99,10 +99,11 @@ func (chef *Chef) GetDataByName(name string) (map[string]string, bool, error) {
 //        fmt.Printf("%#v", cfg)
 //    }
 func (chef *Chef) GetTypedDataByName(data interface{}, name string) (bool, error) {
-	resp, err := chef.Get(fmt.Sprintf("data/%s", name))
+        resp, err := chef.Get(fmt.Sprintf("data/%s", name))
 	if err != nil {
 		return false, err
 	}
+
 	body, err := responseBody(resp)
 	if err != nil {
 		if strings.Contains(err.Error(), "404") {

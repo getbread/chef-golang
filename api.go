@@ -16,6 +16,7 @@ import (
 	"math/big"
 	"mime"
 	"mime/multipart"
+        "net"
 	"net/http"
 	"net/url"
 	"os"
@@ -305,10 +306,18 @@ func (chef *Chef) makeRequest(request *http.Request) (*http.Response, error) {
 	var client *http.Client
 	if chef.SSLNoVerify {
 		tr := &http.Transport{
+			Dial: (&net.Dialer{
+				Timeout: 5 * time.Second,
+			}).Dial,
+			TLSHandshakeTimeout: 5 * time.Second,
 			Proxy:           http.ProxyFromEnvironment,
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+			DisableKeepAlives: true,
 		}
-		client = &http.Client{Transport: tr}
+		client = &http.Client{
+			Timeout: time.Second * 10,
+			Transport: tr,
+                }
 	} else {
 		client = &http.Client{}
 	}
@@ -369,6 +378,7 @@ func readFileFromRequest(r *http.Request, boundary string) (string, error) {
 	// multipart as this is how the Chef API is designed
 	fp := form.File["tarball"][0]
 	file, err := fp.Open()
+	defer file.Close()
 	if err != nil {
 		return "", err
 	}
@@ -538,11 +548,12 @@ func responseBody(resp *http.Response) ([]byte, error) {
 		return nil, errors.New(resp.Status)
 	}
 
+	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
+
 	if err != nil {
 		return nil, err
 	}
-	resp.Body.Close()
 
 	return body, nil
 }
